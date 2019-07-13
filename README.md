@@ -1,6 +1,6 @@
 # Leaderboard API for at-the-tsbyss
 
-This is the Leaderboards API for the (at-the-tsbyss game)[https://github.com/one-two/at-the-tsbyss].
+This is the Leaderboards API for the [at-the-tsbyss game](https://github.com/one-two/at-the-tsbyss).
 
 ## Endpoints
 
