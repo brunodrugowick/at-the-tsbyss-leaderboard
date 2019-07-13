@@ -1,0 +1,23 @@
+{
+  "name": "at-the-tsbyss-leaderboard",
+  "version": "1.0.0",
+  "description": "An API the handle the leaderboards of the at-the-tsbyss game.",
+  "main": "index.js",
+  "repository": "https://github.com/brunodrugowick/at-the-tsbyss-leaderboard",
+  "author": "Bruno Drugowick",
+  "license": "",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "~2.8.5",
+    "dotenv": "~8.0.0",
+    "express": "~4.17.1",
+    "mongoose": "~5.6.4",
+    "mongoose-paginate": "^5.0.3",
+    "require-dir": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "~1.19.1"
+  }
+}
