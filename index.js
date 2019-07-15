@@ -1,4 +1,4 @@
-require("dotenv").config();
+const result = require("dotenv").config();
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -10,6 +10,11 @@ const requireDir = require('require-dir');
 const app = express();
 // Allowing JSON
 app.use(express.json());
+
+
+if (result.error) {
+  throw result.error
+}
 
 // Connecting to MongoDB
 mongoose.connect(process.env.DB, {
@@ -31,6 +36,13 @@ requireDir("./src/models");
 app.use('/api', require("./src/apiRoutes"));
 
 app.use(cors());
+
 app.listen(process.env.PORT || 3333, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
   });
+
+//   const Score = mongoose.model('Score');
+// Score.create({
+//     name: "mano",
+//     score: "44"
+// });
