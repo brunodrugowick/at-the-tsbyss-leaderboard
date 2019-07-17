@@ -10,6 +10,10 @@ const ScoreSchema = new mongoose.Schema({
     score: {
         type: String,
         required: true
+    },
+    killedby: {
+        type: String,
+        required: true
     }
 },
 { 
