@@ -27,10 +27,12 @@ mongoose.set('useFindAndModify', false);
 // Requiring all models for the application using require-dir module
 requireDir("./src/models");
 
+// Allowing requests from everywhere. Not recommended. NOT RECOMMENDED!
+app.use(cors());
+
 // Redirecting /api to the apiRoutes file.
 app.use('/api', require("./src/apiRoutes"));
 
-app.use(cors());
 app.listen(process.env.PORT || 3333, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
   });
