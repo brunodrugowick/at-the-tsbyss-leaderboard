@@ -8,12 +8,24 @@ module.exports = {
          * Extracts from the request the params page and limit.
          * If not defined, they default to 1 and 10 respectively.
          */
-        const { page = 1, limit = 10 } = req.query;
+        const { 
+            page = 1, 
+            limit = 10,
+            sortType = 'desc',
+            sortField = 'score'
+        } = req.query;
 
         /**
          * Runs the query on MongoDB via Mongoose.
          */
-        const leaderboard = await Score.paginate({}, { page: parseInt(page), limit: parseInt(limit) });
+        const leaderboard = await Score.paginate(
+            {}, 
+            { 
+                page: parseInt(page), 
+                limit: parseInt(limit),
+                sort: { [sortField]: sortType }
+            }
+        );
         
         return res.json(leaderboard);
     },

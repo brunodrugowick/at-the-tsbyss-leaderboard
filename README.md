@@ -37,7 +37,13 @@ You can append query string to the URL. Example:
 ```
 .../leaderboard?page=3&limit=20
 ```
-Valid values are `page`, which defaults to `1`, and `limit`, which defaults to `10`.
+
+Valid values are:
+
+- `page`, which defaults to `1`
+- `limit`, which defaults to `10`
+- `sortType`, which defaults to `desc` but also accepts `asc`
+- `sortField`, which accepts any field from the model
 
 ### POST on /api/score
 Creates a new Score. Body must be a JSON like so:
