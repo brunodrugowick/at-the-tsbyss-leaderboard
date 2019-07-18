@@ -13,6 +13,7 @@ Returns the leaderboard:
       "_id": "5d2957ef2616604d11fb90e1",
       "name": "Bruno Drugowick",
       "score": "102",
+      "killedby": "Orc",
       "createdAt": "2019-07-13T04:02:55.158Z",
       "updatedAt": "2019-07-13T05:47:24.347Z",
       "__v": 0
@@ -21,6 +22,7 @@ Returns the leaderboard:
       "_id": "5d2967211016e15ccb929e86",
       "name": "Drugo",
       "score": "340",
+      "killedby": "Spore",
       "createdAt": "2019-07-13T05:07:45.033Z",
       "updatedAt": "2019-07-13T05:07:45.033Z",
       "__v": 0
@@ -33,7 +35,7 @@ Returns the leaderboard:
 }
 ```
 
-You can append query string to the URL. Example:
+You can append query string to the leaderboard enpoint. Example:
 ```
 .../leaderboard?page=3&limit=20
 ```
@@ -50,7 +52,8 @@ Creates a new Score. Body must be a JSON like so:
 ```
 {
 	"name": "Drugo",
-	"score": "999"
+	"score": "999",
+  "killedby": "Orc"
 }
 ```
 
@@ -61,6 +64,7 @@ Returns one Score. `:id` must be a valid id from the database (_id on MongoDB). 
   "_id": "5d2957ef2616604d11fb90e1",
   "name": "Bruno Drugowick",
   "score": "102",
+  "killedby": "Orc",
   "createdAt": "2019-07-13T04:02:55.158Z",
   "updatedAt": "2019-07-13T05:47:24.347Z",
   "__v": 0
@@ -74,7 +78,8 @@ Body must be a JSON like so (all values are optional):
 ```
 {
 	"name": "Drugo",
-	"score": "999"
+	"score": "999",
+  "killedby": "Orc"
 }
 ```
 
@@ -95,6 +100,7 @@ For development, I recommend the use of `dotenv` package, then you can have thos
 const Score = mongoose.model('Score');
 Score.create({
     name: "Bruno Drugowick",
-    score: "100"
+    score: "100",
+    killedby: "Orc"
 });
 ```

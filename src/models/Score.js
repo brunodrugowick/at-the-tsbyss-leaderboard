@@ -27,3 +27,9 @@ ScoreSchema.plugin(mongoosePaginate);
 
 // Register the model
 module.exports = mongoose.model("Score", ScoreSchema);
+
+// Exports defaults
+module.exports = {
+    'DEFAULT_SORTFIELD': 'score',
+    'DEFAULT_SORTTYPE': 'desc'
+}

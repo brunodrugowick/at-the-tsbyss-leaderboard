@@ -1,19 +1,34 @@
 const mongoose = require('mongoose');
-
+const scoreDefaults = require('../models/Score');
 const Score = mongoose.model('Score');
 
 module.exports = {
     async index(req, res) {
+
         /**
          * Extracts from the request the params page and limit.
          * If not defined, they default to 1 and 10 respectively.
          */
-        const { 
+        var { 
             page = 1, 
             limit = 10,
             sortType = 'desc',
             sortField = 'score'
         } = req.query;
+
+        /**
+         * Validate inputs
+         */
+        limit = parseInt(limit);
+        if (!Number.isInteger(limit)) { limit = 10 }
+        page = parseInt(page);
+        if (!Number.isInteger(page)) { page = 1 }
+        if (sortType != 'asc' || sortType != 'desc') { 
+            sortType = scoreDefaults.DEFAULT_SORTTYPE 
+        }
+        if (!Score.schema.paths.hasOwnProperty(sortField)) { 
+            sortField = scoreDefaults.DEFAULT_SORTFIELD 
+        }
 
         /**
          * Runs the query on MongoDB via Mongoose.
