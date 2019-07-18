@@ -12,8 +12,8 @@ module.exports = {
         var { 
             page = 1, 
             limit = 10,
-            sortType = 'desc',
-            sortField = 'score'
+            sortType = scoreDefaults.DEFAULT_SORTTYPE,
+            sortField = scoreDefaults.DEFAULT_SORTFIELD
         } = req.query;
 
         /**
@@ -23,7 +23,7 @@ module.exports = {
         if (!Number.isInteger(limit)) { limit = 10 }
         page = parseInt(page);
         if (!Number.isInteger(page)) { page = 1 }
-        if (sortType != 'asc' || sortType != 'desc') { 
+        if (sortType != 'asc' && sortType != 'desc') { 
             sortType = scoreDefaults.DEFAULT_SORTTYPE 
         }
         if (!Score.schema.paths.hasOwnProperty(sortField)) { 

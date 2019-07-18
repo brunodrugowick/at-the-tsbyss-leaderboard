@@ -32,6 +32,8 @@ app.use(cors());
 
 // Redirecting /api to the apiRoutes file.
 app.use('/api', require("./src/apiRoutes"));
+app.get('/', (req, res) => {res.json("John is a man of focus, commitment, sheer will... " +
+"something you know very little about.")} );
 
 app.listen(process.env.PORT || 3333, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
