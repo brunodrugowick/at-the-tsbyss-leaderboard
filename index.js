@@ -31,7 +31,7 @@ requireDir("./src/models");
 app.use(cors());
 
 // Redirecting /api to the apiRoutes file.
-app.use('/api', require("./src/apiRoutes"));
+app.use('/api', require("./src/controllers/ScoreController"));
 app.get('/', (req, res) => {res.json("John is a man of focus, commitment, sheer will... " +
 "something you know very little about.")} );
 
