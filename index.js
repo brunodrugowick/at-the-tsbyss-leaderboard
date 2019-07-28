@@ -24,6 +24,11 @@ mongoose.connect(process.env.DB, {
  */
 mongoose.set('useFindAndModify', false);
 
+/**
+ * Ensures the creation of indexes given https://github.com/Automattic/mongoose/issues/6890.
+ */
+mongoose.set('useCreateIndex', true);
+
 // Requiring all models for the application using require-dir module
 requireDir("./src/models");
 
