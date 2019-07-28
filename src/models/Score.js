@@ -5,7 +5,9 @@ const mongoosePaginate = require('mongoose-paginate');
 const ScoreSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        index: true,
+        unique: true
     },
     score: {
         type: Number,

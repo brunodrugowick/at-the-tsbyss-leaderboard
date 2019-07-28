@@ -46,14 +46,63 @@ const index = async function(req, res) {
 }
 
 const store = async function(req, res) {
+    
     /**
-     * Save score.
+     * Searches for a document with the same 'name'.
      * 
-     * req.body must contains the fields from the model.
+     * The logic of verifying the score (lower or higher) happens here.
      */
-    const score = await Score.create(req.body);
 
-    return res.json(score);
+    console.log("Received score {" + req.body.name + ", " + req.body.score + "}");
+
+    await Score.findOne({name: req.body.name}).then((existentScore) => {
+
+        if (!existentScore) {
+        
+            console.log(" - creating {" + req.body.name + ", " + req.body.score + "}");
+            Score.create(req.body, function (err, doc) {
+                if (err) {
+                    console.log(" - error creating score: " + err.message);
+                    return res.status(500).json(err);
+                } else {
+                    console.log(" - created new score {" + doc.name + ", " + doc.score + "}");
+                    doc.dbOperation = "Created new score.";
+                    return res.status(200).json(doc);
+                }
+            });
+        
+        } else {
+        
+            console.log(" - updating {" + existentScore.name + ", " + existentScore.score + "}");
+            Score.findOneAndUpdate(
+                { 
+                    name: req.body.name, 
+                    score: {$lt: req.body.score} 
+                },
+                req.body,
+                { new: true },
+                (err, doc) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).json("There's was an error updating the Score. " + err.message);
+                    } else if (doc) {
+                        console.log(" - updated to new score {" + doc.name + ", " + doc.score + "}");
+                        doc.dbOperation = "Updated existing score.";
+                        return res.status(200).json(doc);
+                    } else {
+                        console.log(" - kept existent score {" + existentScore.name + ", " + existentScore.score + "}");
+                        existentScore.dbOperation = "Kept existing score.";
+                        return res.status(200).json(existentScore);
+                    }
+                }
+            );
+        }
+
+    }).catch((error) => {
+        console.log(error);
+        return res.status(500).json("There's was an error. " + error.message);
+    });
+
 }
 
 const show = async function(req, res) {
@@ -65,30 +114,8 @@ const show = async function(req, res) {
     return res.json(score);
 }
 
-const update = async function(req, res) {
-    /** 
-     * Find by _id and update with the data coming into body.
-     * 
-     * Body must contain one or more valid fields from the model.
-     */
-    const score = await Score.findByIdAndUpdate(req.params.id, req.body, { new: true });
-
-    return res.json(score);
-}
-
-const destroy = async function(req, res) {
-    /** 
-     * Removes a score.
-     */
-    await Score.findByIdAndRemove(req.params.id);
-
-    return res.send();
-}
-
 routes.get('/leaderboard', index);
 routes.post('/score', store);
 routes.get('/score/:id', show);
-routes.put('/score/:id', update);
-routes.delete('/score/:id', destroy);
 
 module.exports = routes;
