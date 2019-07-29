@@ -2,7 +2,7 @@
 
 This is the Leaderboards API for the [at-the-tsbyss game](https://github.com/one-two/at-the-tsbyss).
 
-## Endpoints
+## REST Endpoints
 
 ### GET on /api/leaderboard
 Returns the leaderboard:
@@ -75,8 +75,48 @@ Returns one Score. `:id` must be a valid id from the database (_id on MongoDB). 
 }
 ```
 
+## GraphQL (BETA)
+
+Yes, there's a GraphQL API available! You can find the playground on the port `3334` by default (can be defined with `PORT_GRAPHQL` environemnt variable).
+
+If you manage to find the GraphQL Playground, you know you have access to the schema documentation. But here are the three available operations already defined for you to quick start:
+
+```
+query leaderboard {
+  leaderboard {
+    id
+    name
+    score
+    killedby
+  }
+}
+
+query score {
+  score(id: "5d3e21a3c0c29f243247aae0") {
+    id
+    name
+    score
+    killedby
+  }
+}
+
+mutation createScore {
+  score(
+    name: "GraphQL Scorer",
+    score: 123.21,
+    killedby: "the requirements",
+  ) {
+    id
+    name
+    score
+    killedby
+  }
+}
+```
+
 ## Environment Variables for the application to work properly
 For development, I recommend the use of `dotenv` package, then you can have those env vars set on a .env file. For production, please, make sure to use at least the required env vars below:
 
 - Optional. `PORT=<port>`. Specifies the port for the application to run, like `3000` for example. Defaults to `3333` if not present.
 - Required. `DB=<connection url>`. Specifies the MongoDB connection URL.
+- Optional. `PORT_GRAPHQL=<port>`. Specifies the port for the GraphQL to run, like `4000` for example. Defaults to `3334` if not present.

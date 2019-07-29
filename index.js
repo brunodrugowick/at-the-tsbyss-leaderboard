@@ -1,7 +1,13 @@
 require("dotenv").config();
 
 const express = require('express');
+
+const { GraphQLServer } =  require('graphql-yoga');
+const path = require('path');
+const resolvers = require('./src/graphql/resolvers');
+
 const mongoose = require('mongoose');
+
 const cors = require('cors');
 
 const requireDir = require('require-dir');
@@ -11,10 +17,17 @@ const app = express();
 // Allowing JSON
 app.use(express.json());
 
+// Defining graphQL app
+const graphqlApp = new GraphQLServer({
+    typeDefs: path.resolve(__dirname, 'src', 'graphql', 'schema.graphql'),
+    resolvers
+})
+const graphQLPort = process.env.PORT_GRAPHQL || 3334;
+
 // Connecting to MongoDB
 mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
-}).then(console.log("Am I connected? Not sure, actually."));
+}).then(console.log("[Mongoose] Am I connected? Not sure, actually."));
 
 /**
  * Make Mongoose use `findOneAndUpdate()`. Note that this option is `true` 
@@ -37,6 +50,14 @@ app.use(cors());
 
 // Redirecting /api to the apiRoutes file.
 app.use('/api', require("./src/controllers/ScoreController"));
+
+// Starting GraphQL server.
+graphqlApp.start({
+    port: graphQLPort
+});
+console.log("GraphQL Express server listening on port %d in %s mode", graphQLPort, app.settings.env)
+
+// Easter egg
 app.get('/', (req, res) => {res.json("John is a man of focus, commitment, sheer will... " +
 "something you know very little about.")} );
 
