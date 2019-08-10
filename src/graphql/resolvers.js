@@ -10,11 +10,17 @@ module.exports = {
     },
 
     Mutation: {
-        score: (_, { name, score, killedby }) => new Score({
-            name: name + ". This is a dummy score to test the API. Why would I let you create a Score so easily? =P",
-            score: score,
-            killedby: killedby + ". This is a dummy score to test the API. Why would I let you create a Score so easily? =P"
-        }),
+        score: (_, { name, score, killedby }) => {
+            score = new Score({
+                name: name,
+                score: score,
+                killedby: killedby,
+            });
+            score.message = "This is a dummy score to test the API. " + 
+                "Why would I let you create a Score so easily? =P";
+            
+            return score;
+        }
     }
 
 }

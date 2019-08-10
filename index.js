@@ -1,33 +1,31 @@
 require("dotenv").config();
 
 const express = require('express');
-
-const { GraphQLServer } =  require('graphql-yoga');
-const path = require('path');
-const resolvers = require('./src/graphql/resolvers');
-
+const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
-
 const cors = require('cors');
-
 const requireDir = require('require-dir');
 
 // Starting app
 const app = express();
-// Allowing JSON
 app.use(express.json());
+app.use(cors());
 
-// Defining graphQL app
-const graphqlApp = new GraphQLServer({
-    typeDefs: path.resolve(__dirname, 'src', 'graphql', 'schema.graphql'),
-    resolvers
-})
-const graphQLPort = process.env.PORT_GRAPHQL || 3334;
+app.use('/api', require("./src/controllers/ScoreController"));
+
+app.use('/graphql', graphqlHTTP({
+    schema: require('./src/graphql/schema'),
+    graphiql: process.env.GRAPHIQL,
+}));
 
 // Connecting to MongoDB
 mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
-}).then(console.log("[Mongoose] Am I connected? Not sure, actually."));
+}).then(function(fullfilled) {
+    fullfilled.connections.forEach(connection => {
+        console.log(`Connected to ${connection.host}:${connection.port}`);
+    });
+});
 
 /**
  * Make Mongoose use `findOneAndUpdate()`. Note that this option is `true` 
@@ -44,18 +42,6 @@ mongoose.set('useCreateIndex', true);
 
 // Requiring all models for the application using require-dir module
 requireDir("./src/models");
-
-// Allowing requests from everywhere. Not recommended. NOT RECOMMENDED!
-app.use(cors());
-
-// Redirecting /api to the apiRoutes file.
-app.use('/api', require("./src/controllers/ScoreController"));
-
-// Starting GraphQL server.
-graphqlApp.start({
-    port: graphQLPort
-});
-console.log("GraphQL Express server listening on port %d in %s mode", graphQLPort, app.settings.env)
 
 // Easter egg
 app.get('/', (req, res) => {res.json("John is a man of focus, commitment, sheer will... " +
