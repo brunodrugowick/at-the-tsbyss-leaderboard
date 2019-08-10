@@ -109,9 +109,27 @@ const show = async function(req, res) {
     /**
      * Find a score by its _id on the database.
      */
-    const score = await Score.findById(req.params.id);
+    const score = await Score.findById(req.params.id, 
+        function (error, response) {
+            if (error) {
+                console.log("Error searching for id " + req.params.id);
+                
+                if (error.name === "CastError") { 
+                    return res.status(400).json(
+                        {"message": "Not a valid Score ID."}
+                    )
+                }
 
-    return res.json(score);
+                return res.status(500).json(error);
+            } else if (response) {
+                console.log("Returning Score id " + response.id);
+                return res.json(response);
+            } else {
+                console.log("Score not found " + req.params.id);
+                res.status(404).json({"message": "Score not found"});
+            }
+        }
+    );
 }
 
 routes.get('/leaderboard', index);
