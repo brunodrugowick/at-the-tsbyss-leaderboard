@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', require("./src/controllers/ScoreController"));
+app.use('/users', require("./src/controllers/UserController"));
 
 app.use('/graphql', graphqlHTTP({
     schema: require('./src/graphql/schema'),
